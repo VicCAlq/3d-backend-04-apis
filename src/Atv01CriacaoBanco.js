@@ -33,7 +33,7 @@ const app = express();
 const porta = 3000;
 
 const db = new sql.Database(
-  '/.beyblade.db',
+  './beyblade.db',
   (erro) => {
     if (erro) {
       console.error('Erro ao abrir o banco de dados "beyblade.db":', erro.message);
@@ -50,20 +50,16 @@ db.run(
     lamina TEXT,
     catraca TEXT,
     ponta TEXT,
-    participante TEXT NOT NULL UNIQUE,
+    participante TEXT NOT NULL UNIQUE
   )`,
-
-  db.run(
-    `INSERT INTO beyblades (nome, lamina, catraca, ponta. partipante) VALUES`,
-      (erro) => {
-        if (erro) {
-          console.error('Erro ao criar inserir beyblades na tabela "beyblades"', erro.message);
-        } else {
-          console.log('beyblades inseridos na tabela "beyblades');
-        }
-      }
-  )
-)
+     (erro) => {
+       if (erro) {
+         console.error('Erro ao criar inserir beyblades na tabela "beyblades"', erro.message);
+       } else {
+         console.log('beyblades inseridos na tabela "beyblades');
+       }
+     }
+ )
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'indexAtv.html'))
