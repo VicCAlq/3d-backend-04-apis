@@ -46,10 +46,11 @@ beybladedb.run (
 
     db.run(
         `INSERT INTO  participante (nome, lamina, catraca, ponta, participante ) VALUES
-          (Asa de Valquíria Accel', 'Valtryek
-Espada', aguda, 'Valt Aoi' ),
-          ('Spriggan Spread Fusion', 'Storm Spryzen', redonda, 'Shuren Kurenai'),
-          ('Drenar Fafnir 8 Nada', 'Garra Geist', agudo e pontudo, 'De La Hoya'),
+                  (Asa de Valquíria Accel', 'Valtryek
+Espada', redondo ,aguda, 'Valt Aoi' ),
+          ('Spriggan Spread Fusion', 'Storm Spryzen', redonda, aguda, 'Shuren Kurenai'),
+          ('Drenar Fafnir 8 Nada', 'Garra Geist', agudo e pontudo, achatado, 'De La Hoya'),
+
         `,
         (erro) => {
           if (erro) {
