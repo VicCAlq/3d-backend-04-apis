@@ -23,7 +23,7 @@ const path = require('path');
 const port = 3000;
 
 app.use(express.static(path.join(__dirname, 'src')));
-
+const beybladedb = require("sqlite3").verbose();
 const  beybladedb = new sql.Database (
   './beyblade.db',
   (erro) => { 
