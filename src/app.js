@@ -135,7 +135,7 @@ app.get('/api/figurinhas/posicao/:posicao', (req, res) => {
   )
 })
 
-// Aqui temos uma rota de APi para encontrar um jogaddor a partir de seu nome
+// Aqui temos uma rota de APi para encontrar um jogador a partir de seu nome
 app.get('/api/figurinhas/nome/:nome', (req, res) => {
   // Extraímos o argumento que queremos usar da requição
   const nome = req.params.nome
