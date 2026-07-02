@@ -55,9 +55,9 @@ Espada', redondo ,aguda, 'Valt Aoi' ),
         `,
         (erro) => {
           if (erro) {
-            console.error('Erro ao criar inserir jogadores na tabela "beyblades"', erro.message);
+            console.error('Erro ao criar inserir jogadores na tabela "beyblades", erro.message);
           } else {
-            console.log('Jogadores inseridos na tabela "beyblades');
+            console.log('Jogadores inseridos na tabela "beyblades");
           }
         }
       )
