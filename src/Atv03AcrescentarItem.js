@@ -46,13 +46,17 @@ db.run(
     ponta TEXT,
     participante TEXT NOT NULL UNIQUE
   )`,
-    (erro) => {
-      if (erro) {
-        console.error('Erro ao criar inserir beyblades na tabela "beyblades"', erro.message);
-      } else {
-        console.log('beyblades inseridos na tabela "beyblades');
+ db.run(
+    `INSERT INTO beyblades (nome, lamina, catraca, ponta, participante) VALUES`,
+      (erro) => {
+        if (erro) {
+          console.error('Erro ao criar a tabela "beyblades"', erro.message);
+        } else {
+          console.log('beyblades inseridos na tabela "beyblades');
+        }
       }
-    }
+  )
+)
 )
 
 app.get('/', (req, res) => {
