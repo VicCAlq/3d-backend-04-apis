@@ -24,3 +24,56 @@
   * Ao final deste arquivo, use "module.exports = app" para
   * exportar o objeto do servidor para os testes automatizados.
   */
+
+
+const express = require('express')
+const path = require('path')
+const cors = require('cors')
+const sql = require('sqlite3').verbose()
+
+const porta = 3000
+
+const app = express()
+
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(cors())
+app.use(express.static(path.join(__dirname, 'src')))
+
+const db = new sql.Database('./figurinhas.db', (erro) => {
+  if (erro) {
+    console.error(erro.message)
+  } else {
+    console.log('Banco conectado')
+  }
+})
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS selecao (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    posicao TEXT CHECK(posicao in ('atacante', 'meio-campo', 'zagueiro', 'goleiro')),
+    camisa INTEGER
+  )
+`)
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS beyblades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    lamina TEXT,
+    catraca TEXT,
+    ponta TEXT,
+    participante TEXT NOT NULL UNIQUE
+  )
+`)
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'indexAtv.html'))
+})
+
+app.listen(porta, () => {
+  console.log(`Servidor rodando em http://localhost:${porta}`)
+})
+
+module.exports = app
