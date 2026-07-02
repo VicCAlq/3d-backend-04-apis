@@ -55,7 +55,7 @@ beybladedb.run (
 )
 
     db.run(
-        `INSERT INTO  participante (nome, lamina, catraca, ponta, participante ) VALUES
+        `INSERT INTO  beyblades (nome, lamina, catraca, ponta, participante ) VALUES
                   (Asa de Valquíria Accel', 'Valtryek
 Espada', redondo ,aguda, 'Valt Aoi' ),
           ('Spriggan Spread Fusion', 'Storm Spryzen', redonda, aguda, 'Shuren Kurenai'),
@@ -64,9 +64,9 @@ Espada', redondo ,aguda, 'Valt Aoi' ),
         `,
         (erro) => {
           if (erro) {
-            console.error('Erro ao criar inserir jogadores na tabela "selecao"', erro.message);
+            console.error('Erro ao criar inserir jogadores na tabela "beyblades"', erro.message);
           } else {
-            console.log('Jogadores inseridos na tabela "selecao');
+            console.log('Jogadores inseridos na tabela "beyblades');
           }
         }
       )
