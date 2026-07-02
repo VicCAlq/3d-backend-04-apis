@@ -54,7 +54,7 @@ db.run(
   )`,
      (erro) => {
        if (erro) {
-         console.error('Erro ao criar inserir beyblades na tabela "beyblades"', erro.message);
+         console.error('Erro ao criar a tabela "beyblades"', erro.message);
        } else {
          console.log('beyblades inseridos na tabela "beyblades');
        }
