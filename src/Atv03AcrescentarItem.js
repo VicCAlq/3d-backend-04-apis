@@ -110,7 +110,7 @@ app.get('/api/beyblade/cadastrar', (req, res) => {
 
   db.all(
     // Comando INSERT no SQL, onde as interrogações vão ser substituídas pelos valores
-    `INSERT INTO beyblades (nome, lamina, catraca, ponta, participante) VALUES (?, ?, ?)`,
+    `INSERT INTO beyblades (nome, lamina, catraca, ponta, participante) VALUES (?, ?, ?, ?, ?)`,
     [ nome, lamina, catraca, ponta, participante],
     // Tratamento básico de erros como nos casos acima
     (erro, itensDaTabela) => {
@@ -119,7 +119,7 @@ app.get('/api/beyblade/cadastrar', (req, res) => {
         return;
       }
       res.json({
-        message: `Beyblade ${nome} adicionada com sucesso para a posição de ${posicao} com a camisa ${camisa}`,
+        message: `Beyblade ${nome} adicionada com sucesso com lamina ${lamina} catraca ${catraca} ponta ${ponta}`,
         data: { id: this.lastID },
         id: this.lastID,
         total: itensDaTabela,
