@@ -126,11 +126,11 @@ app.delete("/api/beyblade/remover", (req, res) => {
         return;
       }
       if (this.changes === 0) {
-        res.status(404).json({ error: 'Personagem não encontrado' });
+        res.status(404).json({ error: 'Participante não encontrado' });
         return;
       }
       res.json({
-        message: `Jogador removido da escalação.`,
+        message: `Participante removido do campeonato.`,
         data: { id: this.lastID },
         id: this.lastID,
         total: itensDaTabela,
