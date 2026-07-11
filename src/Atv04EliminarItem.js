@@ -86,6 +86,36 @@ app.get(‘/api/beyblade/cadastrar’, (req, res) => {
 
 }
 
+app.delete('/api/beyblade/remover/:id', (req, res) => {
+  if (!req.params) {
+    res.status(400).json({ error: erro.message });
+    return
+  }
+
+  const { id } = req.params
+
+  db.all(
+    `DELETE FROM beyblades WHERE id = ?`,
+    [ id ],
+    (erro, itensDaTabela) => {
+      if (erro) {
+        res.status(400).json({ error: erro.message });
+        return;
+      }
+      if (this.changes === 0) {
+        res.status(404).json({ error: 'Personagem não encontrado' });
+        return;
+      }
+      res.json({
+        message: `beyblade removido da tabela.`,
+        data: { id: this.lastID },
+        id: this.lastID,
+        total: itensDaTabela,
+      });
+    }
+  )
+})
+
 module.exports = app
 
 
