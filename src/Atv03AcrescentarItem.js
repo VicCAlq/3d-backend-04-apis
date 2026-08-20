@@ -7,7 +7,7 @@
   *
   * Esta rota é executada quando o formulário do site é preenchido,
   * e ao ser executada, esta rota deve armazenar as informações
-  * preenchidas no formmulário em variáveis (estas informações
+  * preenchidas no formulário em variáveis (estas informações
   * existem dentro do objeto req.query).
   *
   * Após armazenadas estas variáveis, deve ser executado o comando
@@ -17,3 +17,135 @@
   * Ao final deste arquivo, use "module.exports = app" para
   * exportar o objeto do servidor para os testes automatizados.
   */
+
+const express = require('express')
+const path = require('path')
+const cors = require('cors');
+// Importando a ferramenta pra utilizar bancos de dados
+const sql = require('sqlite3').verbose()
+
+// Definindo a porta usada para abrir o servidor (no final deste código)
+const porta = 3000
+
+const app = express()
+// Necessário para leitura do corpo de uma requisição
+app.use(express.urlencoded({ extended: true }))
+// Necessário para interpretação do formato JSON
+app.use(express.json())
+// Para evitar erros de CORS
+app.use(cors());
+// Para configurar o servidor para olhar dentro da pasta src por padrão
+app.use(express.static(path.join(__dirname, 'src')));
+
+// Criação do banco de dados
+const db = new sql.Database(
+  './beyblade.db', // Nome do arquivo do banco de dados
+  (erro) => { // Função que executa que o banco é criado
+    if (erro) {
+      console.error('Erro ao abrir o banco de dados "beyblade.db":', erro.message);
+    } else {
+      console.log('Conectado ao banco de dados SQLite3 "beyblade.db"');
+    }
+  }
+)
+
+// A função "run" executa código SQL, e recebe 2 argumentos
+db.run(
+  // 1º argumento = comando SQL
+  `CREATE TABLE IF NOT EXISTS beyblades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    lamina TEXT,
+    catraca TEXT,
+    ponta TEXT,
+    participante TEXT NOT NULL UNIQUE
+  )`,
+  // 2º argumento = função executada após termos o resultado do comando SQL
+  (erro) => {
+    if (erro) {
+      console.error('Erro ao criar a tabela "beyblades"', erro.message);
+    } else {
+      console.log('Tabela "beyblades" pronta!');
+
+      db.run(
+        `INSERT INTO beyblades (nome, lamina, catraca, ponta, participante) VALUES
+          ('Valtryek', 'Valtryek (V1)', 'Wing', 'Accel', 'Valt Aoi')
+        `,
+        (erro) => {
+          if (erro) {
+            console.error('Erro ao criar inserir jogadores na tabela "beyblades"', erro.message);
+          } else {
+            console.log('Jogadores inseridos na tabela "beyblades');
+          }
+        }
+      )
+    }
+  }
+)
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'indexAtv.html'))
+})
+
+// Nossa primeira rota de API vai enviar todas as informações do banco de dados
+app.get('/api/beyblade', (req, res) => {
+
+  // "all" envia todas as informações que combinarem com os parâmetros
+  db.all(
+    // 1º argumento: comando SQL
+    `SELECT * FROM beyblades`, 
+    // 2º argumento: parâmetros (exemplo: posição = "zagueiro")
+    [],
+    // 3º argumento: Função executada após termos o resultado do comando SQL
+    (erro, itensDaTabela) => {
+      // Se der ruim, enviamos a mensagem  de erro
+      if (erro) {
+        res.status(400).json({ error: erro.message })
+        return
+      }
+      // Se der bom, enviamos o resultado
+      res.status(200).json({
+        message: "Requisição feita com sucesso",
+        data: itensDaTabela
+      })
+    }
+  )
+})
+
+app.get('/api/beyblade/cadastrar', (req, res) => {
+  // Se não houver requisição, enviamos um erro
+  if (!req.query) {
+    res.status(400).json({ error: erro.message });
+    return
+  }
+
+  // Extraímos os argumentos enviados pela requisição
+  const {
+    nome, lamina, catraca, ponta, participante
+  } = req.query
+
+  db.all(
+    // Comando INSERT no SQL, onde as interrogações vão ser substituídas pelos valores
+    `INSERT INTO selecao (nome, lamina, catraca, ponta, participante) VALUES (?, ?, ?, ?, ?)`,
+    [nome, lamina, catraca, ponta, participante],
+    // Tratamento básico de erros como nos casos acima
+    (erro, itensDaTabela) => {
+      if (erro) {
+        res.status(400).json({ error: erro.message });
+        return;
+      }
+      res.json({
+        message: `Beyblade ${nome} cadastrada com sucesso pelo participante ${participante}`,
+        data: { id: this.lastID },
+        id: this.lastID,
+        total: itensDaTabela,
+      });
+    }
+  )
+})
+
+app.listen(porta, () => {
+  console.log(`Servidor rodando em http://localhost:${porta}`)
+})
+
+module.exports = app
