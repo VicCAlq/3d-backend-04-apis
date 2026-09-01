@@ -15,17 +15,16 @@
   * exportar o objeto do servidor para os testes automatizados.
   */
 
-const express = require('express');
+const express = require('express')
+const path = require('path')
+const cors = require('cors');
+const sql = require('sqlite3').verbose();
 const app = express();
-const path = require('path');
-const port = 3000;
+const porta = 3000;
 
-app.use(express.static(path.join(__dirname, 'src')));
-
-const beybladedb = require("sqlite3").verbose();
-const  beybladedb = new sql.Database (
+const db = new sql.Database(
   './beyblade.db',
-  (erro) => { 
+  (erro) => {
     if (erro) {
       console.error('Erro ao abrir o banco de dados "beyblade.db":', erro.message);
     } else {
@@ -33,39 +32,36 @@ const  beybladedb = new sql.Database (
     }
   }
 )
-beybladedb.run (
-  `CREATE TABLE IF NOT EXISTS beyblades
-  
-  id INTEGER PRIMARY KEY AUTOINCREMENT
-  nome TEXT NOT NULL UNIQUE
-  lamina TEXT,
-  catraca TEXT,
-  ponta TEXT,
-  participante TEXT NOT NULL UNIQUE
-   ` 
+
+db.run(
+  `CREATE TABLE IF NOT EXISTS beyblades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL UNIQUE,
+    lamina TEXT,
+    catraca TEXT,
+    ponta TEXT,
+    participante TEXT NOT NULL UNIQUE
+  )`,
+ db.run(
+    `INSERT INTO beyblades (nome, lamina, catraca, ponta, participante) VALUES`,
+      (erro) => {
+        if (erro) {
+          console.error('Erro ao criar a tabela "beyblades"', erro.message);
+        } else {
+          console.log('beyblades inseridos na tabela "beyblades');
+        }
+      }
+  )
+)
 )
 
-    db.run(
-        `INSERT INTO  beyblades (nome, lamina, catraca, ponta, participante ) VALUES
-                  (Asa de Valquíria Accel', 'Valtryek
-Espada', redondo ,aguda, 'Valt Aoi' ),
-          ('Spriggan Spread Fusion', 'Storm Spryzen', redonda, aguda, 'Shuren Kurenai'),
-          ('Drenar Fafnir 8 Nada', 'Garra Geist', agudo e pontudo, achatado, 'De La Hoya'),
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'indexAtv.html'))
+})
 
-        `,
-        (erro) => {
-          if (erro) {
-            console.error('Erro ao criar inserir jogadores na tabela "beyblades", erro.message);
-          } else {
-            console.log('Jogadores inseridos na tabela "beyblades");
-          }
-        }
-      )
-
-      app.get("/api/beyblade", (req, res) => {
-         db.all(
-
-    `SELECT * FROM beyblades`, 
+app.get('/api/beyblade', (req, res) => {
+  db.all(
+    `SELECT * FROM beyblades`,
     [],
     (erro, itensDaTabela) => {
       if (erro) {
@@ -80,12 +76,8 @@ Espada', redondo ,aguda, 'Valt Aoi' ),
   )
 })
 
-app.get ( '/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'indexAtv.html'))
-} );
-
-app.listen(3000, () => {
-    console.log('Servidor rodando! Acesse http://localhost:3000/');
-});
+app.listen(porta, () => {
+  console.log(`Servidor rodando em http://localhost:${porta}`)
+})
 
 module.exports = app
